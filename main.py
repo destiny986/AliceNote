@@ -11,28 +11,32 @@
 # nuitka-project: --product-name=AliceNote
 # nuitka-project: --output-filename=AliceNote
 
-
-
 import os
-from pyrogram import Client
 from random import randint
+
 from dotenv import dotenv_values
-
-
-config = dotenv_values(os.path.join(os.getenv('LOCALAPPDATA'), "RTools/.env"))
-message_voice_list = [
-    "/s Кабан, вставай, <[300]> пора хрюкать",
-    "/s Истекаю кровью как свинья на бойне",
-    "/s Пора, <[500]> брат",
-    "/s Застелил кровать, <[500]> пора убивать",
-    "/s Н+оу каб+анас, <[500]> си, <[500]> сеньёре",
-]
+from pyrogram import Client
 
 
 def send_voice():
     """Звуковое оповещение на колонку Алиса."""
-    # app = Client(os.path.join(os.getenv('LOCALAPPDATA'), "RTools/", config["CLIENT_NAME"]), config["ACC_ID"], config["ACC_HASH"])
-    app = Client(config["CLIENT_NAME"], config["ACC_ID"], config["ACC_HASH"])
+    config = dotenv_values(
+        os.path.join(os.getenv("LOCALAPPDATA"), "RTools/.env")
+    )
+    with open(
+        os.path.join(os.getenv("LOCALAPPDATA"), "RTools/AlicePhrases.txt"),
+        "r",
+        encoding="UTF-8",
+    ) as file:
+        message_voice_list = [line.rstrip() for line in file]
+
+    app = Client(
+        os.path.join(
+            os.getenv("LOCALAPPDATA"), "RTools/", config["CLIENT_NAME"]
+        ),
+        config["ACC_ID"],
+        config["ACC_HASH"],
+    )
     app.start()
     app.send_message(
         "@alice_speaker_bot",
